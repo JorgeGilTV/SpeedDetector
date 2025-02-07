@@ -12,7 +12,7 @@ import numpy as np
 import time
 from time import sleep
 
-cap=cv2.VideoCapture('C:/Users/jorgil/Documents/Python Scripts/ContadorCarros/carros.mp4')
+cap=cv2.VideoCapture('C:/Users/Python Scripts/ContadorCarros/SpeedDetector/carros.mp4')
 
 count_line_position=530
 count_line_position2=450
@@ -30,7 +30,7 @@ def centro_handle(x,y,w,h):
     return cx,cy
 
 detect=[]
-offset=3  #error permitible entre pixeles
+offset=5  #error permitible entre pixeles
 counter=0
 counter2=0
 fin=0
@@ -48,7 +48,7 @@ while True:
     tempo=float(1/30)
     sleep(tempo)
 
-    area_pts = np.array([[0,original.shape[0]-50],[500, 300], [original.shape[1]-630,300], [original.shape[1]-780, original.shape[0]-1]])
+    area_pts = np.array([[0,original.shape[0]-50],[540, 300], [original.shape[1]-650,300], [original.shape[1]-780, original.shape[0]-1]])
     
     imAux = np.zeros(shape=(original.shape[:2]), dtype=np.uint8)
     imAux = cv2.drawContours(imAux, [area_pts], -1, (255), -1)
@@ -67,8 +67,8 @@ while True:
     cv2.imshow('Filtro Morfologico 1',
                dilatada)
     contador,h=cv2.findContours(dilatada,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-    cv2.line(original,(295,count_line_position2),(590,count_line_position2),(255,127,127),3)
-    cv2.line(original,(195,count_line_position),(570,count_line_position),(255,127,127),3)
+    cv2.line(original,(310,count_line_position2),(575,count_line_position2),(255,127,127),3)
+    cv2.line(original,(195,count_line_position),(560,count_line_position),(255,127,127),3)
     for (i,c) in enumerate(contador):
 
         (x,y,w,h)=cv2.boundingRect(c)
@@ -106,16 +106,16 @@ while True:
                 calculo+=1
                 vel=(10/valor)*(3.6)
         
-        cv2.putText(original,'V:'+str(int(vel)),(x,y-20),cv2.FONT_HERSHEY_TRIPLEX,1,(255,244,0),2)
+        cv2.putText(original,'Speed:'+str(int(vel)),(x,y-20),cv2.FONT_HERSHEY_TRIPLEX,1,(255,244,0),2)
 
-    cv2.putText(original,"Vehiculos contados:"+str(counter),(450,70),cv2.FONT_HERSHEY_TRIPLEX,1.5,(55,40,250),3)
-    cv2.putText(original,"Ultima velocidad:"+str(int(vel)),(450,120),cv2.FONT_HERSHEY_TRIPLEX,1.5,(255,140,50),3)
+    cv2.putText(original,"Total:"+str(counter),(450,70),cv2.FONT_HERSHEY_TRIPLEX,1.5,(55,40,250),3)
+    cv2.putText(original,"Last Speed:"+str(int(vel)),(450,120),cv2.FONT_HERSHEY_TRIPLEX,1.5,(255,140,50),3)
     cv2.line(original, (295, 150), (315, 150), (0, 255, 0), 3)         # Visualización del conteo de autos
     cv2.drawContours(original, [area_pts], -1, (0, 0, 255), 2)
     cv2.rectangle(original, (original.shape[1]-70, 215), (original.shape[1]-5, 270), (0, 255, 0), 2)
     cv2.putText(original, str(counter), (original.shape[1]-55, 250),
                 cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0,255,0), 2)
-    cv2.imshow('Rec',original)
+    cv2.imshow('Freeway Speed',original)
 
 
 
